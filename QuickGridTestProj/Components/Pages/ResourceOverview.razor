@@ -1,7 +1,7 @@
 ﻿@page "/resourceoverview"
 @using Microsoft.AspNetCore.Components.QuickGrid
+@using QuickGridTest.Data.Entities
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
-@implements IAsyncDisposable;
 
 <div class="pb-4 border-bottom border-secondary">
     <EditForm Model="NewResource" OnValidSubmit="OnAddResourceSubmit" Enhance FormName="AddResourceForm">
@@ -27,7 +27,7 @@
 <div class="pt-4">
 
      <h3>Resources overview</h3>
-     <QuickGrid Class="mt-2" Items="_dbContext.Resources.OrderBy(x => x.ResourceId)" ItemKey="(x => x.ResourceId)" Pagination="Pagination">
+    <QuickGrid TGridItem="Resource" Class="mt-2" ItemsProvider="GetItems" ItemKey="(x => x.ResourceId)" Pagination="Pagination">
          <PropertyColumn Property="@(p => p.ResourceName)" Title="Name" Sortable="true" />
          <PropertyColumn Property="@(p => p.ResourceType)" Sortable="true" />
          <TemplateColumn>

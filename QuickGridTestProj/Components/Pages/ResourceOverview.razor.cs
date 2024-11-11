@@ -18,9 +18,25 @@ namespace QuickGridTestProj.Components.Pages
 
         public PaginationState Pagination = new PaginationState { ItemsPerPage = 10 };
 
-        protected override void OnInitialized()
+        public async ValueTask<GridItemsProviderResult<Resource>> GetItems(GridItemsProviderRequest<Resource> request)
         {
-            _dbContext = _dbContextFactory.CreateDbContext();
+            using var context = _dbContextFactory.CreateDbContext();
+            var totalCount = await context.Resources.CountAsync(request.CancellationToken);
+            IQueryable<Resource> query = context.Resources.OrderBy(x => x.ResourceId);
+            query = request.ApplySorting(query).Skip(request.StartIndex);
+            if (request.Count.HasValue)
+            {
+                query = query.Take(request.Count.Value);
+            }
+
+            var items = await query.ToArrayAsync(request.CancellationToken);
+            var result = new GridItemsProviderResult<Resource>
+            {
+                Items = items,
+                TotalItemCount = totalCount
+            };
+
+            return result;
         }
 
         private async Task OnAddResourceSubmit()
@@ -42,12 +58,6 @@ namespace QuickGridTestProj.Components.Pages
                 dbContext.Resources.Remove(entity);
                 await dbContext.SaveChangesAsync();
             }
-
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            await _dbContext.DisposeAsync();
         }
     }
 }
