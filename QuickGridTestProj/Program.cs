@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using QuickGridTest.Data.Contexts;
 using QuickGridTestProj.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,12 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddQuickGridEntityFrameworkAdapter();
 
-builder.Services.AddDbContextFactory<QuickGridDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration["ConnectionStrings:DbConnection"]
-        ));
 
 var app = builder.Build();
 
