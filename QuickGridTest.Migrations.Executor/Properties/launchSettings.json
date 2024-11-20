@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "QuickGridTest.Migrations.Executor": {
-      "commandName": "Project",
-      "commandLineArgs": "-c \"Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QuickGridTestDb;Integrated Security=True;\""
-    }
-  }
-}
